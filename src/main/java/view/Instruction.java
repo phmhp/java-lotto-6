@@ -5,7 +5,7 @@ import java.util.List;
 public class Instruction {
 
     //구입 금액 입력 요청 문구 출력
-    public void inputPurchaseMoney() {
+    public void purchaseMoney() {
         System.out.println("구입금액을 입력해 주세요.");
     }
 
@@ -16,6 +16,7 @@ public class Instruction {
 
     //구입 수량 출력 문구
     public void purchaseAmount(int amount) {
+        blankLine();
         System.out.println(amount + "개를 구매했습니다.");
     }
 
@@ -24,7 +25,7 @@ public class Instruction {
         //TODO:구현 예정
     }
 
-    public void inputWinnigNumber() {
+    public void winnigNumber() {
         System.out.println("당첨 번호를 입력해 주세요.");
     }
 
