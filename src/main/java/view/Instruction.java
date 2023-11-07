@@ -1,5 +1,9 @@
 package view;
 
+import domain.AllLotto;
+import domain.Lotto;
+import domain.MatchCountNumber;
+
 import java.util.List;
 
 public class Instruction {
@@ -21,7 +25,10 @@ public class Instruction {
     }
 
     //구입 수량만큼 발행된 로또 번호 출력
-    public void lottoNumberAll(List lottoNumber) {
+    public void lottoNumberAll(List<Lotto> allLotto) {
+        for (Lotto oneLotto:allLotto){
+            System.out.println(oneLotto);
+        }
         //TODO:구현 예정
     }
 
@@ -29,12 +36,13 @@ public class Instruction {
         System.out.println("당첨 번호를 입력해 주세요.");
     }
 
-    public void inputBonusNumber() {
+    public void bonusNumber() {
         System.out.println("보너스 번호를 입력해 주세요.");
     }
 
     public void winningStatistics() {
         System.out.println("당첨 통계");
+        dashLine();
     }
 
     public void dashLine() {
@@ -61,8 +69,14 @@ public class Instruction {
         System.out.println("6개 일치 (2,000,000,000원) - " + sixNumber + "개");
     }
 
-
-    public void totalResult(int percent) {
+    public void totalResult(MatchCountNumber matchCountNumber){
+        threeMatchCount(matchCountNumber.getThreeMatch());
+        fourMatchCount(matchCountNumber.getFourMatch());
+        fiveMatchCount(matchCountNumber.getFiveMatch());
+        fiveBonusMatchCount(matchCountNumber.getFiveBonusMatch());
+        sixBonusMatchCount(matchCountNumber.getSixMatch());
+    }
+    public void benefit(int percent) {
         System.out.println("총 수익률은 " + percent + "%입니다.");
     }
 }
