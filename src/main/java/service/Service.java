@@ -3,24 +3,27 @@ package service;
 import camp.nextstep.edu.missionutils.Randoms;
 import domain.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 import domain.WinningLotto;
+
 public class Service {
     private Lotto lotto;
     private AllLotto allLotto;
-    private List<Integer> winningLotto=new ArrayList<>();
-    MatchCountNumber matchCountNumber=new MatchCountNumber();
+    private List<Integer> winningLotto = new ArrayList<>();
+    private int bonusNumber;
+    MatchCountNumber matchCountNumber = new MatchCountNumber();
 
-    public Service( AllLotto allLotto) {
+    public Service(AllLotto allLotto) {
         this.allLotto = allLotto;
+        this.bonusNumber = bonusNumber;
     }
-//https://www.freecodecamp.org/korean/news/java-string-to-int-how-to-convert-a-string-to-an-integer/
-    public int purchaseMoney(String purchaseMoney) {
-        int totalPurchaseMoney=0;
 
-        totalPurchaseMoney=Integer.parseInt(purchaseMoney);
+    //https://www.freecodecamp.org/korean/news/java-string-to-int-how-to-convert-a-string-to-an-integer/
+    public int purchaseMoney(String purchaseMoney) {
+        int totalPurchaseMoney = 0;
+
+        totalPurchaseMoney = Integer.parseInt(purchaseMoney);
 
         //예외처리
 
@@ -29,7 +32,8 @@ public class Service {
 
 
     }
-    public int amountNumber(int purchaseMoney){
+
+    public int amountNumber(int purchaseMoney) {
         return divideThousand(purchaseMoney);
     }
 
@@ -49,9 +53,10 @@ public class Service {
         }
 
     }
-    public void winningNumber(String winningNumberInput){
+
+    public void winningNumber(String winningNumberInput) {
         //parsing
-        for (String element :winningNumberInput.split(",")){
+        for (String element : winningNumberInput.split(",")) {
             winningLotto.add(Integer.parseInt(element));
             //System.out.println(element);
         }
@@ -60,52 +65,103 @@ public class Service {
 
     }
 
-    public void bonusNumber(String bonusNumber){
-
+    public void bonusNumber(String bonusNumberInput) {
+        //예외처리
+        bonusNumber = Integer.parseInt(bonusNumberInput);
     }
-    public List<Lotto> sortNumber(List<Lotto> lottos){
+
+    public List<Lotto> sortNumber(List<Lotto> lottos) {
 
         List<Lotto> sortedLottos = new ArrayList<>();
-        //sort , add
 
-        return sortedLottos;
+        for (Lotto lotto : lottos) {
+
+            //System.out.println(lotto.getLottoNumber());
+            Collections.sort(lotto.getLottoNumber());
+            //System.out.println(lotto.getLottoNumber());
+
+        }
+
+        //for (Lotto lotto : lottos) {
+         //   System.out.println(lotto.getLottoNumber());
+        //}
+
+        return lottos;
     }
 
-    public MatchCountNumber matchLotto(List<Lotto> lottos,List<Integer> winningLotto){
-         //비교해서 개수 알아내기
-          for (Lotto one : lottos) {
-            updateMatchNumber(matchOneLotto(one));
-          }
-          return matchCountNumber;
+    public MatchCountNumber matchLotto(List<Lotto> lottos, List<Integer> winningLotto) {
+        //비교해서 개수 알아내기
+        for (Lotto one : lottos) {
+            updateMatchNumber(matchOneLotto(one, winningLotto));
+        }
+        return matchCountNumber;
     }
-public void updateMatchNumber(int matchNum){
-    int count = matchNum;
 
-    if (count==5){fiveBonus(lotto);}
-    else if (count == 3) {matchCountNumber.threeMatchPlus();}
-    else if (count == 4) {matchCountNumber.fourMatchPlus();}
-    else if (count == 6) {matchCountNumber.sixMatchPlus();}
+    public int matchOneLotto(Lotto oneLotto, List<Integer> winningLotto) {
+        int count = 0;
+        boolean same = false;
 
-}
-    public int matchOneLotto(Lotto lotto){
-        int count=0;
-        //비교
+        for (int element : oneLotto.getLottoNumber()) {
+            same = compareWinningNumber(element, winningLotto);
+            if (same == true) {
+                count++;
+            }
+        }
         return count;
-         }
-
-    public int profitRate(MatchCountNumber matchCountNumber, int purchaseMoney){
-    //enum으로 설정한 값
-        int sum=0;
-        sum+=Reward.THREE_MATCH.getRewardMoney()*matchCountNumber.getThreeMatch();
-        sum+=Reward.FOUR_MATCH.getRewardMoney()*matchCountNumber.getFourMatch();
-        sum+=Reward.FIVE_MATCH.getRewardMoney()*matchCountNumber.getFiveMatch();
-        sum+=Reward.FIVE_BONUS_MATCH.getRewardMoney()*matchCountNumber.getFiveBonusMatch();
-        sum+=Reward.SIX_MATCH.getRewardMoney()*matchCountNumber.getSixMatch();
-
-        return (purchaseMoney/sum)*100;
     }
-    public void fiveBonus(Lotto lotto){
+
+    public boolean compareWinningNumber(int element, List<Integer> winningLotto) {
+        for (int winningElement : winningLotto) {
+            if (element == winningElement) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public void updateMatchNumber(int matchNum) {
+        int count = matchNum;
+        boolean bonusTF = false;
+
+        if (count == 5) {
+            bonusTF = fiveBonus(lotto);
+        } else if (count == 3) {
+            matchCountNumber.threeMatchPlus();
+        } else if (count == 4) {
+            matchCountNumber.fourMatchPlus();
+        } else if (count == 6) {
+            matchCountNumber.sixMatchPlus();
+        }
+
+        if (bonusTF == true) {
+            matchCountNumber.fiveBonusMatchPlus();
+        } else if (bonusTF == false) {
+            matchCountNumber.fourMatchPlus();
+        }
+    }
+
+
+    public int profitRate(MatchCountNumber matchCountNumber, int purchaseMoney) {
+        //enum으로 설정한 값
+        int sum = 0;
+        sum += Reward.THREE_MATCH.getRewardMoney() * matchCountNumber.getThreeMatch();
+        sum += Reward.FOUR_MATCH.getRewardMoney() * matchCountNumber.getFourMatch();
+        sum += Reward.FIVE_MATCH.getRewardMoney() * matchCountNumber.getFiveMatch();
+        sum += Reward.FIVE_BONUS_MATCH.getRewardMoney() * matchCountNumber.getFiveBonusMatch();
+        sum += Reward.SIX_MATCH.getRewardMoney() * matchCountNumber.getSixMatch();
+
+        return (purchaseMoney / sum) * 100;
+    }
+
+    public boolean fiveBonus(Lotto lotto) {
         //보너스 번호랑 비교
+        for (int lottoNumber : lotto.getLottoNumber()) {
+            if (bonusNumber == lottoNumber) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

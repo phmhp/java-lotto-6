@@ -27,9 +27,8 @@ public class Instruction {
     //구입 수량만큼 발행된 로또 번호 출력
     public void lottoNumberAll(List<Lotto> allLotto) {
         for (Lotto oneLotto:allLotto){
-            System.out.println(oneLotto);
+            System.out.println(oneLotto.getLottoNumber());
         }
-        //TODO:구현 예정
     }
 
     public void winnigNumber() {
