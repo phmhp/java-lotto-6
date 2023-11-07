@@ -82,63 +82,86 @@ public class Service {
 
         }
 
-        //for (Lotto lotto : lottos) {
-         //   System.out.println(lotto.getLottoNumber());
-        //}
 
         return lottos;
     }
 
-    public MatchCountNumber matchLotto(List<Lotto> lottos, List<Integer> winningLotto) {
+
+    public MatchCountNumber matchLotto(List<Lotto> lottos) {
         //비교해서 개수 알아내기
         for (Lotto one : lottos) {
-            updateMatchNumber(matchOneLotto(one, winningLotto));
+            System.out.println("test here" + one.getLottoNumber());
+            int matchNum = matchOneLotto(one);
+            if (matchNum == 5) {
+                countBonusPlusOne(one);
+                //continue;
+            } else if (matchNum != 5) {
+                updateMatchNumber(matchNum);
+            }
+            //updateMatchNumber(matchOneLotto(one));
         }
         return matchCountNumber;
     }
 
-    public int matchOneLotto(Lotto oneLotto, List<Integer> winningLotto) {
+    public int matchOneLotto(Lotto oneLotto) {
         int count = 0;
         boolean same = false;
 
         for (int element : oneLotto.getLottoNumber()) {
-            same = compareWinningNumber(element, winningLotto);
+            same = compareWinningNumber(element);
             if (same == true) {
                 count++;
             }
         }
+        System.out.println("count 개수 : " + count);
         return count;
     }
 
-    public boolean compareWinningNumber(int element, List<Integer> winningLotto) {
+    public void updateMatchNumber(int matchNum) {
+        int count = matchNum;
+        System.out.println("count의 개수는? " + count);
+
+
+        if (count < 3) {
+            ;
+        } else if (count >= 3) {
+            countPlusOne(count);
+        }
+    }
+
+    public void countPlusOne(int count) {
+
+        if (count == 3) {
+            System.out.println("three"+count);
+            matchCountNumber.threeMatchPlus();
+        } else if (count == 4) {
+            System.out.println("four"+count);
+            matchCountNumber.fourMatchPlus();
+        } else if (count == 6) {
+            System.out.println("six"+count);
+            matchCountNumber.sixMatchPlus();
+        }
+
+
+    }
+
+    public void countBonusPlusOne(Lotto fiveLotto) {
+        boolean bonusTF = fiveBonus(fiveLotto);
+        if (bonusTF == true) {
+            matchCountNumber.fiveBonusMatchPlus();
+        } else if (bonusTF == false) {
+            matchCountNumber.fourMatchPlus();
+        }
+    }
+
+
+    public boolean compareWinningNumber(int element) {
         for (int winningElement : winningLotto) {
             if (element == winningElement) {
                 return true;
             }
         }
         return false;
-    }
-
-
-    public void updateMatchNumber(int matchNum) {
-        int count = matchNum;
-        boolean bonusTF = false;
-
-        if (count == 5) {
-            bonusTF = fiveBonus(lotto);
-        } else if (count == 3) {
-            matchCountNumber.threeMatchPlus();
-        } else if (count == 4) {
-            matchCountNumber.fourMatchPlus();
-        } else if (count == 6) {
-            matchCountNumber.sixMatchPlus();
-        }
-
-        if (bonusTF == true) {
-            matchCountNumber.fiveBonusMatchPlus();
-        } else if (bonusTF == false) {
-            matchCountNumber.fourMatchPlus();
-        }
     }
 
 
