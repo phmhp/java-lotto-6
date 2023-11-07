@@ -90,7 +90,7 @@ public class Service {
     public MatchCountNumber matchLotto(List<Lotto> lottos) {
         //비교해서 개수 알아내기
         for (Lotto one : lottos) {
-            System.out.println("test here" + one.getLottoNumber());
+           // System.out.println("test here" + one.getLottoNumber());
             int matchNum = matchOneLotto(one);
             if (matchNum == 5) {
                 countBonusPlusOne(one);
@@ -113,13 +113,11 @@ public class Service {
                 count++;
             }
         }
-        System.out.println("count 개수 : " + count);
         return count;
     }
 
     public void updateMatchNumber(int matchNum) {
         int count = matchNum;
-        System.out.println("count의 개수는? " + count);
 
 
         if (count < 3) {
@@ -165,17 +163,7 @@ public class Service {
     }
 
 
-    public int profitRate(MatchCountNumber matchCountNumber, int purchaseMoney) {
-        //enum으로 설정한 값
-        int sum = 0;
-        sum += Reward.THREE_MATCH.getRewardMoney() * matchCountNumber.getThreeMatch();
-        sum += Reward.FOUR_MATCH.getRewardMoney() * matchCountNumber.getFourMatch();
-        sum += Reward.FIVE_MATCH.getRewardMoney() * matchCountNumber.getFiveMatch();
-        sum += Reward.FIVE_BONUS_MATCH.getRewardMoney() * matchCountNumber.getFiveBonusMatch();
-        sum += Reward.SIX_MATCH.getRewardMoney() * matchCountNumber.getSixMatch();
 
-        return (purchaseMoney / sum) * 100;
-    }
 
     public boolean fiveBonus(Lotto lotto) {
         //보너스 번호랑 비교
@@ -185,6 +173,21 @@ public class Service {
             }
         }
         return false;
+    }
+
+    public int profitRate(MatchCountNumber matchCountNumber, int purchaseMoney) {
+        //enum으로 설정한 값
+        int sum = 0;
+
+        sum += Reward.THREE_MATCH.getRewardMoney() * matchCountNumber.getThreeMatch();
+        sum += Reward.FOUR_MATCH.getRewardMoney() * matchCountNumber.getFourMatch();
+        sum += Reward.FIVE_MATCH.getRewardMoney() * matchCountNumber.getFiveMatch();
+        sum += Reward.FIVE_BONUS_MATCH.getRewardMoney() * matchCountNumber.getFiveBonusMatch();
+        sum += Reward.SIX_MATCH.getRewardMoney() * matchCountNumber.getSixMatch();
+
+        if (sum ==0) return 0;
+
+        return ( sum/purchaseMoney) * 100;
     }
 }
 
