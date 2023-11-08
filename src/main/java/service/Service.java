@@ -12,7 +12,8 @@ public class Service {
     private AllLotto allLotto;
     private List<Integer> winningLotto = new ArrayList<>();
     private int bonusNumber;
-    MatchCountNumber matchCountNumber = new MatchCountNumber();
+    private MatchCountNumber matchCountNumber = new MatchCountNumber();
+    private Validate validate = new Validate();
 
     public Service(AllLotto allLotto) {
         this.allLotto = allLotto;
@@ -24,10 +25,6 @@ public class Service {
         int totalPurchaseMoney = 0;
 
         totalPurchaseMoney = Integer.parseInt(purchaseMoney);
-
-        //예외처리
-
-        //숫자 변환 후 도메인 로직으로 넘기기
         return totalPurchaseMoney;
 
 
@@ -90,7 +87,7 @@ public class Service {
     public MatchCountNumber matchLotto(List<Lotto> lottos) {
         //비교해서 개수 알아내기
         for (Lotto one : lottos) {
-           // System.out.println("test here" + one.getLottoNumber());
+            // System.out.println("test here" + one.getLottoNumber());
             int matchNum = matchOneLotto(one);
             if (matchNum == 5) {
                 countBonusPlusOne(one);
@@ -130,13 +127,13 @@ public class Service {
     public void countPlusOne(int count) {
 
         if (count == 3) {
-            System.out.println("three"+count);
+            System.out.println("three" + count);
             matchCountNumber.threeMatchPlus();
         } else if (count == 4) {
-            System.out.println("four"+count);
+            System.out.println("four" + count);
             matchCountNumber.fourMatchPlus();
         } else if (count == 6) {
-            System.out.println("six"+count);
+            System.out.println("six" + count);
             matchCountNumber.sixMatchPlus();
         }
 
@@ -163,8 +160,6 @@ public class Service {
     }
 
 
-
-
     public boolean fiveBonus(Lotto lotto) {
         //보너스 번호랑 비교
         for (int lottoNumber : lotto.getLottoNumber()) {
@@ -175,7 +170,7 @@ public class Service {
         return false;
     }
 
-    public int profitRate(MatchCountNumber matchCountNumber, int purchaseMoney) {
+    public int profitRate(MatchCountNumber matchCountNumber, int purchaseMoney) { //둘째자리에서 반올림 구현
         //enum으로 설정한 값
         int sum = 0;
 
@@ -185,9 +180,9 @@ public class Service {
         sum += Reward.FIVE_BONUS_MATCH.getRewardMoney() * matchCountNumber.getFiveBonusMatch();
         sum += Reward.SIX_MATCH.getRewardMoney() * matchCountNumber.getSixMatch();
 
-        if (sum ==0) return 0;
+        if (sum == 0) return 0;
 
-        return ( sum/purchaseMoney) * 100;
+        return (sum / purchaseMoney) * 100;
     }
 }
 

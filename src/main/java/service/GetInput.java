@@ -2,11 +2,13 @@ package service;
 import camp.nextstep.edu.missionutils.Console;
 
 public class GetInput {
+    private Validate validate = new Validate();
 
     public String inputPurchaseMoney(){
-        String getMoney;
-        int amount;
+        String getMoney="";
         getMoney=Console.readLine();
+        System.out.println("GetInput-here");
+
         return getMoney;
     }
 
